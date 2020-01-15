@@ -1,0 +1,35 @@
+01- Introdução
+Seja muito bem vindo(a) ao curso Node.js: Desenvolvendo com JavaScript no backend do nosso instrutor Gabriel Leite.
+
+Para que você tenha um ótimo aproveitamento do conteúdo que será apresentado, é importante ter completado os pré-requisitos necessários:
+
+JavaScript avançado I: ES6, orientação a objetos e padrões de projetos
+JavaScript Avançado II: ES6, orientação a objetos e padrões de projetos
+Agora vamos direto à pergunta central desse curso: o que é o Node?
+
+O Node nada mais é do que uma plataforma que possibilita o desenvolvimento de aplicações no backend utilizando a linguagem mais conhecida da web: o JavaScript, que inicialmente foi criada para rodar somente no navegador.
+
+O objetivo é executarmos uma aplicação em Javascript no backend, fazendo com que ela receba requisições do navegador e devolva respostas, tudo por meio do famoso Protocolo HTTP.
+
+A aplicação que construiremos durante esse curso será baseada na nossa já conhecida Casa do Código, e consistirá em uma lista de livros na qual o usuário poderá adicionar, remover, editar, entre outras funcionalidades.
+
+Com isso, estudaremos a fundo quais ferramentas são disponibilizadas pelo Node. Vamos começar?
+***********************************
+02-
+***********************************
+03-
+***********************************
+04-
+***********************************
+05-
+***********************************
+06-
+***********************************
+07-
+***********************************
+08-
+***********************************
+09-
+***********************************
+10-
+***********************************
