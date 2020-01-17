@@ -65,7 +65,19 @@ Você pode baixá-lo aqui.
 
 
 ***********************************
-03-
+03- Primeiros passos com Node
+É hora de darmos os primeiros passos com o Node. Para desenvolvermos qualquer aplicação nessa plataforma, é óbvio que precisaremos instalá-la no computador.
+
+Caso ainda não tenha feito isso, consulte o passo a passo de instalação do Node, com instruções para os principais sistemas operacionais do mercado (Windows, Mac ou Linux).
+
+Em seguida, criaremos uma pasta "casadocodigo" em qualquer diretório do computador. No editor de código da sua preferência (no nosso caso, estamos usando o Visual Studio Code), acessaremos essa pasta e criaremos o arquivo olaMundoNode.js (um arquivo JavaScript comum). Nele, escreveremos uma das instruções mais conhecidas por quem desenvolve com JavaScript: console.log(). Passaremos então a mensagem "Ola Mundo Node!" entre aspas simples. ]
+
+console.log('Ola Mundo Node!');
+Queremos executar esse arquivo utilizando a plataforma Node, fazendo com que ele rode no nosso backend. No Prompt de Comando, acessaremos a pasta "casadocodigo" e escreveremos o comando node seguido do nome do arquivo a ser executado (olaMundoNode.js). Pressionando "Enter" no teclado, a mensagem "Ola Mundo Node!" será exibida na tela.
+
+E o que aprendemos com isso? Bom, é simples: o Node conseguirá executar qualquer arquivo JavaScript (com a extensão .js). Para essa execução, basta utilizarmos o comando node, habilitado a partir do momento em que a plataforma é instalada, e o nome do arquivo.
+
+Agora queremos criar uma aplicação capaz de receber requisições do protocolo HTTP e enviar respostas para o navegador, e é justamente isso que começaremos a seguir. Até lá!
 ***********************************
 04-
 ***********************************
