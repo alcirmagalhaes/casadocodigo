@@ -15,7 +15,55 @@ A aplicação que construiremos durante esse curso será baseada na nossa já co
 
 Com isso, estudaremos a fundo quais ferramentas são disponibilizadas pelo Node. Vamos começar?
 ***********************************
-02-
+02- Infraestrutura do treinamento
+Preparação do ambiente
+O Node.js é um ambiente JavaScript multiplataforma disponível para Linux, Mac e Windows. Para instalá-lo, siga as instruções referentes à sua plataforma.
+
+Node 10.X obrigatório
+É necessário que usemos exatamente a versão 10.X do Node.js, mesmo que existam versões mais recentes, para que seja garantida a compatibilidade com o que é apresentado durante o curso! Uma vez que você, meu aluno, já tenha terminado com sucesso o treinamento, sinta-se livre (e estimulado pelo instrutor) para atualizar as versões utilizadas, obtendo acesso a todo e qualquer novo recurso que tenha sido adicionado.
+
+Se o Node já estiver instalado na máquina, é preciso verificar se ele está pelo menos na versão 10.X com o comando node -v no terminal.
+
+Instalação Node.js no Linux (Ubuntu)
+No Ubuntu, através do terminal (permissão de administrador necessária) executemos o comando abaixo:
+
+sudo apt-get install -y nodejs
+Em algumas distribuições Linux, pode haver um conflito de nomes quando o Node é instalado pelo apt-get. Neste caso específico, no lugar do binário ser node, ele passa a se chamar nodejs. Isso gera problemas pois, como a instrução npm start procura o binário node, e não nodejs, ela não funcionará. Para resolver, usemos a seguinte instrução no terminal para subir o servidor:
+
+nodejs server
+Ou no Ubuntu:
+
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+Depois, o comando npm start funcionará conforme esperado.
+
+Instalação Node.js no Windows
+O instalador poderá ser baixado clicando-se no botão install, diretamente da página do Node.js:
+
+Versão 64 bits (provavelmente seu OS é 64 bits)
+Versão 32 bits
+Durante a instalação, basta clicar nos botões para continuar o assistente. Não troque a pasta padrão do Node.js, a não ser que saiba exatamente o que está fazendo.
+
+Atenção: na plataforma Windows, dependendo da configuração da sua máquina, ou do uso de uma rede corporativa (proxy), pode ser que a instrução npm install não funcione. Caso isso aconteça, pode-se tentar os passos a seguir. Caso o primeiro funcione, não é necessário fazer o segundo:
+
+a) Problema no certificado: no terminal, deve-se executar o comando npm set strict-ssl false. Em seguida, é possível repetir a operação de instalação que falhou.
+
+b) Redes de empresa ou proxy da rede: alguns usuários acessam a rede através de um proxy. Isso pode impedir que o npm tenha acesso ao seu repositório. Nesse sentido, é necessário saber o endereço do proxy para então configurá-lo através das instruções a seguir (troque proxy.company:8080 pelo endereço do seu proxy).
+
+npm config set proxy http://proxy.company.com:8080
+npm config set https-proxy http://proxy.company.com:8080 
+Instalação Node.js no MAC
+O homebrew é a maneira mais recomendada para instalar o Node.js, por meio do comando:
+
+brew update
+brew install node
+Não usa homebrew? Sem problema, basta baixar o instalador clicando no botão install, diretamente da página do Node.js.
+
+Editor: Visual Studio Code (gratuito)
+Recomendo extremamente o uso do Visual Studio Code (VSCode), um editor gratuito criado pela Microsoft e disponível para Windows, Linux e MAC. Sua integração com TypeScript é realizada sem qualquer esforço, e sem configurações adicionais. Além disso, haverá a paridade visual comigo, neste curso.
+
+Você pode baixá-lo aqui.
+
+
 ***********************************
 03-
 ***********************************
