@@ -79,7 +79,37 @@ E o que aprendemos com isso? Bom, é simples: o Node conseguirá executar qualqu
 
 Agora queremos criar uma aplicação capaz de receber requisições do protocolo HTTP e enviar respostas para o navegador, e é justamente isso que começaremos a seguir. Até lá!
 ***********************************
-04-
+04-Exercício - Indo além do console.log()
+Juliana sempre gostou muito da linguagem JavaScript! Portanto, logo após assistir na primeira aula como fazer para executar o primeiro código com Node, já resolveu ir além e executar o seguinte código:
+
+// indo-alem.js
+
+console.log('Olá mundo, Node!');
+alert('O show tem que continuar!');
+O que podemos afirmar sobre o código de nossa colega?
+
+Alternativa correta
+O código funcionará corretamente.
+
+
+Incorreto! A função alert() está definida apenas no navegador! Portanto, como os códigos da plataforma Node rodam do lado do servidor, essa função não está definida o que ocasionará um erro avisando que essa função não está definida.
+
+Alternativa correta
+O código não irá funcionar pois console.log() e alert() são funções do JavaScript que só podem ser utilizadas no navegador.
+
+
+Incorreto! Como visto durante as aulas, o console.log() pode ser utilizado no Node! Só que o mesmo não pode ser dito sobre a função alert() que está definida apenas no navegador! Portanto, como os códigos da plataforma Node rodam do lado do servidor, essa função não está definida o que ocasionará um erro avisando que essa função não está definida.
+
+Alternativa correta
+Ao ser executado o terminal irá imprimir:
+
+Olá mundo, Node!
+alert('O show tem que continuar!');
+^
+
+ReferenceError: alert is not defined
+
+Muito bem, aluno! Está correto! A função alert() está definida apenas no navegador! Portanto, como os códigos da plataforma Node rodam do lado do servidor, essa função não está definida e tal erro ocorre.
 ***********************************
 05-
 ***********************************
