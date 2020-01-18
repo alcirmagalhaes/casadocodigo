@@ -337,7 +337,32 @@ Dentro dela, criaremos outras duas pastas:
 "config", na qual serão armazenados códigos de configuração
 Agora temos o ambiente pronto e estabelecido para prosseguirmos com os estudos. Vamos lá?
 ***********************************
-08-
+08-Exercício - Sobre o Node
+Sobre o Node de modo geral, é correto afirmar:
+
+Alternativa correta
+O Node é uma plataforma que permite a utilização da linguagem JavaScript para desenvolvimento de aplicações server side.
+
+
+Muito bem, aluno! Está correto! O Node.js é uma plataforma, (ou um ambiente de execução para códigos javascript) escrita sobre a engine de Javascript do Chrome, a V8. Ele é todo baseado em eventos e suas operações são não-bloqueantes, o que lhe confere bastante eficiência e leveza.
+
+Alternativa correta
+O npm é o gerenciador de pacotes do Node.
+
+
+Muito bem, aluno! Está correto! Ele tem a função de gerenciar os projetos e pacotes JavaScript externos que precisemos utilizar em cada aplicação. Quando o Node é instalado, o npm também o é, e com certeza será muito útil em qualquer projeto desenvolvido sobre o Node, visto que é muito comum que se precise de libs externas para facilitar o desenvolvimento de certas funcionalidades.
+
+Alternativa correta
+Qualquer arquivo com a extensão .js pode ser executado pelo Node, bastando apenas executar no utilitário de linha de comando do sistema operacional npm nomeDoArquivo.js.
+
+
+Incorreto! O correto seria fazer node nomeDoArquivo.js!
+
+Alternativa correta
+Após a instalação do Node, o npm precisará ser instalado separadamente para que dessa forma possamos trabalhar com pacotes Node.
+
+
+Incorreto! Como visto durante as aulas, o npm é instalado por padrão junto com o Node!
 ***********************************
 09-
 ***********************************
