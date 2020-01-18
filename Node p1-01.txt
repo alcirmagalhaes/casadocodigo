@@ -364,7 +364,16 @@ Após a instalação do Node, o npm precisará ser instalado separadamente para 
 
 Incorreto! Como visto durante as aulas, o npm é instalado por padrão junto com o Node!
 ***********************************
-09-
+09-Consolidando conhecimentos
+Chegou a hora de você seguir todos os passos realizados por mim durante esta aula. Caso já tenha feito, excelente. Se ainda não, é importante que você implemente o que foi visto no vídeo para poder continuar com o próximo capítulo que tem como pré-requisito todo código aqui escrito.
+
+Se por acaso você já domina esta parte, em cada capítulo você terá a opção de baixar o projeto feito até aquele ponto. Você encontrará o link para download na próxima explicação do capítulo.
+
+VER OPINIÃO DO INSTRUTOR
+----
+Opinião do instrutor
+
+Tenha certeza de que tudo está certo antes de continuar. Ficou com dúvida? Recorra ao nosso fórum, não perca tempo!
 ***********************************
 10-
 ***********************************
