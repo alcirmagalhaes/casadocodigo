@@ -1,0 +1,23 @@
+{
+  "name": "casadocodigo",
+  "version": "1.0.0",
+  "description": "livraria casa do codigo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alcirmagalhaes/casadocodigo.git"
+  },
+  "author": "alcir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alcirmagalhaes/casadocodigo/issues"
+  },
+  "homepage": "https://github.com/alcirmagalhaes/casadocodigo#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
