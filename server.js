@@ -1,5 +1,46 @@
-const http = require('http');
-const servidor = http.createServer(function name(req, resp) {
+const express = require('express');
+const app = express();
+
+app.listen(3000, function (req, resp) {
+    console.log('servidor rodando na porta 3000')
+    
+})
+
+app.get('/', function (req, resp) {
+
+    resp.send(
+        `
+            <html>
+                <head>
+                    <meta charset="utf-8">
+                </head>
+                <body>
+                    <h1> Casa do Código </h1>
+                </body> 
+            </html>
+        `
+    );
+    
+})
+
+app.get('/livros', function (req, resp) {
+
+    resp.send(
+        `
+            <html>
+                <head>
+                    <meta charset="utf-8">
+                </head>
+                <body>
+                    <h1> Listagem de livros </h1>
+                </body> 
+            </html>
+        `
+    );
+    
+})
+/* const http = require('http');
+const servidor = http.createServer(function (req, resp) {
 
     let html = '';
     if (req.url == '/') {
@@ -29,4 +70,4 @@ const servidor = http.createServer(function name(req, resp) {
     resp.end(html);
     
 });
-servidor.listen(3000);
+servidor.listen(3000); */
