@@ -18,9 +18,10 @@ module.exports = (app) => {
     })
     
     app.get('/livros', function (req, resp) {
-    
+        /*
         resp.send(
-            `
+             este conteúdo foi para o arquivo listagem.mako 
+             `
                 <html>
                     <head>
                         <meta charset="utf-8">
@@ -29,8 +30,11 @@ module.exports = (app) => {
                         <h1> Listagem de livros </h1>
                     </body> 
                 </html>
-            `
+                ` 
+            );
+        */
+        resp.marko(
+            require('../views/livros/lista/lista.marko')
         );
-        
     })
 };
