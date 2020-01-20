@@ -320,7 +320,105 @@ Essa é uma prática muito comum em projetos Node, agilizando bastante a execuç
 
 Vale ressaltar que feita a alteração no arquivo package.json não é necessária a instalação do nodemon como global. 
 ***********************************
-07-
+07-Exercício - Roteamento e Nodemon
+Após acertar o seu código de configuração do Express, Clara partiu para a construção e isolamento das rotas e configuração do Nodemon. Veja os código a seguir:
+
+// rotas.js
+
+module.exports = (app) => {
+   app.get('/', function(req, resp) {
+       console.log('home');
+       resp.send(
+           `
+               <html>
+                   <head>
+                       <meta charset="utf-8">
+                   </head>
+                   <body>
+                       <h1> Casa do Código </h1>
+                   </body>
+               </html>
+           `
+       );
+   });
+
+   // demais rotas.
+};
+// custom-express.js
+
+const express = require('express');
+const app = express();
+
+const rotas = require('../app/rotas/rotas');
+rotas(app);
+
+module.exports = app;
+E, por fim, o package.json:
+
+{
+ "name": "casadocodigo",
+ "version": "1.0.0",
+ "description": "Livraria Casa do Codigo",
+ "main": "server.js",
+ "scripts": {
+   "test": "echo \"Error: no test specified\" && exit 1",
+   "start": "nodemon server.js --ignore *.marko.js"
+ },
+ "author": "Gabriel Leite",
+ "license": "ISC",
+ "dependencies": {
+   "express": "4.16.3"
+ },
+ "devDependencies": {
+   "nodemon": "1.18.4"
+ }
+}
+Sobre o código, podemos afirmar corretamente:
+
+Alternativa correta
+O código está correto e o Nodemon irá funcionar como esperado ao executarmos no terminal, dentro da pasta do nosso projeto, o comando npm start.
+
+
+Muito bem, aluno! Está correto! Nossa colega dessa vez acertou em todos os passos! Que satisfação aspira!
+
+Alternativa correta
+O código não funcionará pois no módulo de rotas deveria ser feito:
+
+// rotas.js
+
+module.exports = (app) => {
+   app.get('/', function(req, resp) {
+       console.log('home');
+       resp.send(
+           `
+               <html>
+                   <head>
+                       <meta charset="utf-8">
+                   </head>
+                   <body>
+                       <h1> Casa do Código </h1>
+                   </body>
+               </html>
+           `
+       );
+   });
+
+   // demais rotas.
+};
+
+Incorreto! Nossa colega dessa vez acertou em todos os passos do código!
+
+Alternativa correta
+O correto seria adicionar o Nodemon como dependência do projeto e não apenas uma dependência de desenvolvimento. Portanto, deveria ter sido adicinado na seção dependencies e não na devDependencies do arquivo package.json.
+
+
+Incorreto! O Nodemon é uma dependência utilizada apenas durante o desenvolvimento. Portanto, foi adicionada na seção correta.
+
+Alternativa correta
+O código está correto e o Nodemon irá funcionar como esperado ao executarmos no terminal, dentro da pasta do nosso projeto, o comando node start.
+
+
+Incorreto! O código realmente está correto! No entanto, como visto em aula, o comando correto para executar nosso projeto utilizando o script de start definido no package.json é o npm start.
 ***********************************
 08-
 ***********************************
