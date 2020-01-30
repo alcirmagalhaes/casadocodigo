@@ -545,7 +545,24 @@ Quer saber mais sobre o assunto e saber que configurações são essas? Confira 
 
 Agora que conseguimos passar uma listagem para nossa página, queremos fazer isso por meio de um banco de dados, de modo que nossa listagem fique realmente dinâmica. Começaremos a implementar essa nova funcionalidade a seguir!
 ***********************************
-10-
+10-Nodemon e MarkoJS
+O problema do Nodemon com o MarkoJS
+No último vídeo, foi falado sobre a necessidade de efetuar uma configuração especial no package.json para que o Nodemon e o MarkoJS convivam em paz dentro do mesmo projeto. Então, mais do que rapidamente vamos à essa configuração, para que depois possamos entender a sua motivação!
+
+{
+  "scripts": {
+    "start": "nodemon server.js --ignore *.marko.js"
+  }
+}
+Nesse código resumido do arquivo package.json, afinal de contas queremos focar apenas no essencial, podemos ver a definição da seção scripts e do script start com o valor nodemon server.js --ignore *.marko.js.
+
+Isso significa, como visto durante a aula, que quando você, meu aluno, acessar a pasta do projeto pelo terminal do seu sistema operacional e digitar o comando npm start, o que será executado é o comando nodemon server.js --ignore *.marko.js. Afinal de contas, os scripts servem justamente como atalhos para comandos mais complexos.
+
+No entanto, precisamos utilizar os parâmetros --ignore *.marko.js para que o Nodemon ignore os arquivos com final .marko.js. Isso se fez necessário, pois infelizmente o Nodemon tem um pequeno bug que o faz reprocessar indefinidamente os arquivos de template com a extensão .marko transformando-os em arquivos com a extensão .marko.js, mesmo que não tenhamos feito nenhuma modificação em nossos templates.
+
+Infelizmente, como é comum na vida de um programador, a correção desse bug nos obrigará a reiniciar o servidor toda vez que modificarmos um arquivo de template com a extensão .marko uma vez que o Nodemon deixa de os monitorar! É um bug um pouco desagradável, mas que felizmente é possível resolver por meio desse pulo do gato que estou passando a vocês de modo a levá-los todos para a luz!
+
+Portanto, não esqueçam de adicionar essa modificação ao arquivo package.json!
 ***********************************
 11-
 ***********************************
