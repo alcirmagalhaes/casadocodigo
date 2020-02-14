@@ -392,7 +392,100 @@ ID Título
 
 Finalizado esse processo, já estamos aptos a desenvolver a página de cadastro de livros, de modo a aumentar a nossa listagem. É isso que aprendemos a seguir!
 ***********************************
-06-
+06-exercício - Implementando o DAO
+Seguindo em frente, agora para implementar o padrão DAO com Promises, nosso colega Pedro fez o seguinte:
+
+// rotas.js
+
+const LivroDao = require('../infra/livro-dao');
+const db = require('../../config/database');
+
+module.exports = (app) => {
+   app.get('/livros', function (req, resp) {
+      livroDao.lista()
+         .then(livros => resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+               livros
+            }
+         ))
+         .catch(erro => console.log(erro));
+   });
+};
+// livro-dao.js
+
+class LivroDao {
+
+   constructor(db) {
+       this._db = db;
+   }
+
+   lista() {
+       return new Promise((resolve, reject) => {
+           this._db.all(
+               'SELECT * FROM livros',
+               (erro, resultados) => {
+                   if (erro) return reject('Não foi possível listar os livros!');
+
+                   return resolve(resultados);
+               }
+           )
+       });
+   }
+}
+
+module.exports = LivroDao;
+Sobre o código, podemos afirmar corretamente:
+
+Alternativa correta
+O código não funcionará, pois o correto seria passar um callback para o método lista() de LivroDao.
+
+
+Incorreto! Como visto em aula, essa afirmação estaria correta quando estávamos utilizando a abordagem com callbacks! Porém, a implementação agora passou a utilizar Promises.
+
+Alternativa correta
+O código não irá funcionar, pois faltou passar corretamente os dados para o template Marko da seguinte forma:
+
+livroDao.lista()
+       .then(livros => resp.marko(
+           require('../views/livros/lista/lista.marko'),
+           {
+               livros: livros
+           }
+       ))
+       .catch(erro => console.log(erro));
+
+Incorreto! Desde o ES6, quando montamos um objeto JavaScript cuja chave e valor sejam representadas pela mesma palavra (nesse caso, a palavra livros), podemos suprimir a escrita pela segunda vez da palavra e fazer como nosso colega fez.
+
+Alternativa correta
+O código não está correto, pois faltou criar uma instância da classe LivroDao definida no módulo livro-dao passando a ela um objeto representando o banco de dados utilizado. Portanto, o correto seria fazer:
+
+// rotas.js
+
+const LivroDao = require('../infra/livro-dao');
+const db = require('../../config/database');
+
+module.exports = (app) => {
+   app.get('/livros', function (req, resp) {
+      const livroDao = new LivroDao(db); // Criar a instância da classe LivroDao.
+      livroDao.lista()
+         .then(livros => resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+               livros
+            }
+         ))
+         .catch(erro => console.log(erro));
+   });
+};
+
+Muito bem, aluno! Está correto! Realmente nosso colega acabou esquecendo desses detalhes o que acarretaria num erro ao executar a aplicação.
+
+Alternativa correta
+O código está correto e funcionará como esperado.
+
+
+Incorreto! O código não está correto! Ficou faltando criar uma instância da classe LivroDao definida no módulo livro-dao passando a ela um objeto representando o banco de dados utilizado.
 ***********************************
 07-
 ***********************************
