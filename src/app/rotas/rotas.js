@@ -1,4 +1,5 @@
-const db = require('../../config/database')
+const db = require('../../config/database');
+const LivroDao = require('../infra/livro-dao');
 module.exports = (app) => {
     
     app.get('/', function (req, resp) {
@@ -19,6 +20,20 @@ module.exports = (app) => {
     })
     
     app.get('/livros', function (req, resp) {
+
+        const livroDao = new LivroDao(db);
+        livroDao.lista(function(erro, resultados){
+            resp.marko(
+                require('../views/livros/lista/lista.marko'),
+                {
+                    livros: resultados
+                }
+        
+            );
+        })
+        
+        /* código antes da refatoracao 
+
         db.all('SELECT * FROM livros', function(erro, resultados){
 
             resp.marko(
@@ -28,6 +43,6 @@ module.exports = (app) => {
                 }
         
             );
-        })
+        }) */
     })
 };
