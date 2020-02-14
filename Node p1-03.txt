@@ -487,7 +487,32 @@ O código está correto e funcionará como esperado.
 
 Incorreto! O código não está correto! Ficou faltando criar uma instância da classe LivroDao definida no módulo livro-dao passando a ela um objeto representando o banco de dados utilizado.
 ***********************************
-07-
+07-exercício-Vantagens do DAO
+Você entendeu as vantagens do padrão de projeto DAO? Vamos verificar isso marcando as respostas corretas!
+
+Alternativa correta
+O padrão de projeto DAO permite dar maior semântica aos nossos códigos, como foi o caso do que ocorreu no módulo de rotas da nossa aplicação.
+
+
+Muito bem, aluno! Está correto! Essa é uma das utilidades do padrão DAO, e também da grande maioria dos padrões de projetos existentes.
+
+Alternativa correta
+Quando implementamos o padrão DAO, como convenção, sempre criamos uma estrutura com um nome que se inicia pelo tipo de dados acessado (no nosso caso livro) e termina com a palavra DAO. Por isso, no nosso caso, criamos uma classe com o nome LivroDao. Isso é feito para facilitar o entendimento de que aquela classe se refere ao acesso de dados do tipo livro.
+
+
+Muito bem, aluno! Está correto! O objetivo das convenções é justamente facilitar a vida dos desenvolvedores e estabelecer um padrão comum a todos.
+
+Alternativa correta
+O padrão DAO permite que façamos acesso aos dados sem nos preocuparmos em como esse acesso é feito ou onde os dados estão armazenados.
+
+
+Muito bem, aluno! Está correto! Como visto em aula, o padrão DAO é para acesso a dados! Portanto, independentemente se dados estão armazenados num banco de dados, num arquivo xml ou numa planilha, esse padrão é muito bem vindo!
+
+Alternativa correta
+Com o padrão DAO não é necessário escrever nenhum código referente a acesso aos dados pois o próprio Node se encarregará disso.
+
+
+Incorreto! O código de acesso aos dados precisou ser escrito e ficou encapsulado dentro da classe LivroDao.
 ***********************************
 08-
 ***********************************
