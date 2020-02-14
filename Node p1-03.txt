@@ -526,5 +526,13 @@ Opinião do instrutor
 
 Tenha certeza de que tudo está certo antes de continuar. Ficou com dúvida? Recorra ao nosso fórum, não perca tempo!
 ***********************************
-09-
+09-O que aprendemos?
+
+Nesse capítulo, aprendemos:
+
+O que é o SQLite.
+Como utilizar o SQLite numa aplicação Node.
+O que é o padrão DAO.
+O que são Promises.
+Como desenvolver o padrão DAO utilizando uma abordagem voltada para callbacks e voltada para Promises.
 ***********************************
