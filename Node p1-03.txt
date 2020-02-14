@@ -65,7 +65,61 @@ Precisamos nos atentar ao fato de que o arquivo rotas.js está acumulando muitas
 
 Já sabemos que isso não é uma boa prática, mas como melhorar nosso código, distribuindo essas responsabilidades? A solução virá a seguir!
 ***********************************
-03-
+03-exercício - Implementando a listagem
+Pedro fez a seguinte implementação da funcionalidade de listagem de livros:
+
+// rotas.js
+
+const db = require('../../config/database');
+
+module.exports = (app) => {
+
+   app.get('/livros', function(req, resp) {
+       db.all('SELECT * FROM livros', function(erro, resultados) {
+           resp.marko(
+               require('../views/livros/lista/lista.marko')
+           );
+       });
+   });
+};
+Sobre o código, podemos afirmar corretamente:
+
+Alternativa correta
+O código está correto e funcionará como esperado.
+
+
+Incorreto! O código não está correto! Ficou faltando passar ao template os dados dos livros obtidos na consulta ao banco de dados.
+
+Alternativa correta
+O código não está correto pois faltou passar ao template os dados obtidos do banco de dados da seguinte forma:
+
+// rotas.js
+
+const db = require('../../config/database');
+
+module.exports = (app) => {
+
+   app.get('/livros', function(req, resp) {
+       db.all('SELECT * FROM livros', function(erro, resultados) {
+           resp.marko(
+               require('../views/livros/lista/lista.marko'),
+
+               // faltou adicionar as 3 linhas a seguir.
+               {
+                   livros: resultados
+               }
+           );
+       });
+   });
+};
+
+Muito bem, aluno! Está correto! Realmente nosso colega acabou esquecendo de passar ao template os livros que pegou no banco de dados.
+
+Alternativa correta
+O código não funcionará pois não existe um método resp.marko() para criação de templates.
+
+
+Incorreto! Como visto em aula, é exatamente o método resp.marko() que nos permite criar templates com o MarkoJS!
 ***********************************
 04-
 ***********************************
