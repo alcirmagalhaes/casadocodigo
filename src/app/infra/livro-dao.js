@@ -5,7 +5,34 @@ class LivroDao {
         this._db = db;
     }
 
+    adiciona(livro) {
+
+        return new Promise((resolve, reject)=>{
+            this._db.run(`
+                INSERT INTO LIVROS (
+                        titulo,
+                        preco,
+                        descricao
+                    ) values (?, ?, ?)
+                `,
+                [
+                    livro.titulo,
+                    livro.preco,
+                    livro.descricao
+                ],
+                function(err) {
+                    if (err){
+                        console.log(err);
+                        return reject('Não foi possível Addicionar o Livro!');
+                    }
+                    resolve();
+                }
+            )
+        });
+    }
+
     lista() {
+    
         return new Promise((resolve, reject) => {
             this._db.all(
                 'SELECT * FROM livros', 
@@ -14,15 +41,7 @@ class LivroDao {
                     return resolve(resultados);
                 }
             )    
-        })
+        });
     }
-    /* refatoração eliminando a chamada ao callback para o uso de promise   
-    lista(callback) {
-
-        this._db.all(
-            'SELECT * FROM livros', 
-            (erro, resultados) => callback(erro, resultados)
-        )
-    } */
 }
 module.exports = LivroDao;
