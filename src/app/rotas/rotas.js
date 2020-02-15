@@ -1,3 +1,5 @@
+const db = require('../../config/database');
+const LivroDao = require('../infra/livro-dao');
 module.exports = (app) => {
     
     app.get('/', function (req, resp) {
@@ -18,21 +20,27 @@ module.exports = (app) => {
     })
     
     app.get('/livros', function (req, resp) {
-        resp.marko(
-            require('../views/livros/lista/lista.marko'),
-            {
-                livros: [
-                    { 
-                        id: 1,
-                        titulo: 'Fundamentos do Node'
-                    },
-                    { 
-                        id: 2,
-                        titulo: 'Node Avançado'
+
+        const livroDao = new LivroDao(db);
+        livroDao.lista()
+                .then(livros => resp.marko(
+                    require('../views/livros/lista/lista.marko'),
+                    {
+                        livros: livros
                     }
-                ]
-            }
-    
-        );
+        
+                ))
+                .catch(erro => console.log(erro))
+
+        /*  refatoração eliminando a chamada ao callback para o uso de promise   
+        livroDao.lista(function(erro, resultados){
+            resp.marko(
+                require('../views/livros/lista/lista.marko'),
+                {
+                    livros: resultados
+                }
+        
+            );
+        }) */
     })
 };

@@ -564,9 +564,86 @@ Infelizmente, como é comum na vida de um programador, a correção desse bug no
 
 Portanto, não esqueçam de adicionar essa modificação ao arquivo package.json!
 ***********************************
-11-
+11-Exercício - Aprofundando no MarkoJS
+MarkoJS é uma biblioteca que nos permite diversas possibilidades quando o assunto é criação de templates!
+
+Por isso, para testar algumas dessas possibilidades, João fez o seguinte código:
+
+<!-- home.marko -->
+
+<include('./layout.marko')>
+   <@cabecalho>
+       <h1>Casa do Código - Home</h1>
+   </@cabecalho>
+</include>
+
+$ var livrosPromise = new Promise((resolve, reject) => {
+   setTimeout(function() {
+       resolve([
+           {
+               titulo: 'Cangaceiro Node'
+           },
+           {
+               titulo: 'Node na prática'
+           }
+       ]);
+   }, 1000);
+});
+
+<await(livros from livrosPromise)>
+   <div for (livro in livros)>Título: ${livro.titulo}</div>
+</await>
+<!-- layout.marko -->
+<html>
+   <body>
+       <include(input.cabecalho)/>
+   </body>
+</html>
+Sobre o código, podemos afirmar corretamente:
+
+DICA: Para saber mais sobre as possibilidades que o MarkoJS disponibiliza, dê uma olhada na documentação do Marko!
+
+Alternativa correta
+O código não funcionará, pois o MarkoJS não disponibiliza a sintaxe <@cabecalho>.
+
+
+Incorreto! O MarkoJS disponibiliza essa sintaxe para possibilitar a introdução de conteúdo externo em templates, bastando para isso utilizarmos o símbolo @ seguido do nome da seçao que desejamos criar. No código de nosso colega, o nome utilizado foi @cabecalho, mas poderia ter sido um outro nome qualquer que fosse iniciado por @! Para saber mais: https://markojs.com/docs/core-tags/#layouts-with-nested-attributes
+
+Alternativa correta
+O código não funcionará, pois o MarkoJS não disponibiliza um componente <await>.
+
+
+Incorreto! O MarkoJS disponibiliza um componente <await> que pode ser utilizado, como no exemplo, para carregamento de dados assíncronos! Para saber mais: https://markojs.com/docs/core-tags/#async-content
+
+Alternativa correta
+O código funcionará corretamente.
+
+
+Muito bem, aluno! Está correto! O código criará uma página com um cabeçalho de título "Casa do Código - Home", e exibirá uma listagem de livros 1 segundo após o carregamento da página.
+
+Alternativa correta
+O código não funcionará, pois o MarkoJS não disponibiliza um componente <include>.
+
+
+Incorreto! O MarkoJS disponibiliza um componente <include> que é ser utilizado, como no exemplo, para incluir um trecho de template definido em outro arquivo! Facilitando, assim, a reutilização de determinados trechos de código em diferentes páginas! Para saber mais: https://markojs.com/docs/core-tags/#reusable-content
 ***********************************
-12-
+12-Consolidando conhecimentos
+Chegou a hora de você seguir todos os passos realizados por mim durante esta aula. Caso já tenha feito, excelente. Se ainda não, é importante que você implemente o que foi visto no vídeo para poder continuar com o próximo capítulo que tem como pré-requisito todo código aqui escrito.
+
+Se por acaso você já domina esta parte, em cada capítulo você terá a opção de baixar o projeto feito até aquele ponto. Você encontrará o link para download na próxima explicação do capítulo.
+
+VER OPINIÃO DO INSTRUTOR
+----
+Opinião do instrutor
+
+Tenha certeza de que tudo está certo antes de continuar. Ficou com dúvida? Recorra ao nosso fórum, não perca tempo!
 ***********************************
-13-
+13-O que aprendemos?
+Nesse capítulo, aprendemos:
+
+O que é o Express.
+Criar rotas utilizando o Express.
+Como exportar informações e funcionalidades de nossos módulos Node usando a sintaxe module.exports.
+O que é o Nodemon e como utilizá-lo para agilizar o desenvolvimento.
+Criar templates dinâmicos com MarkoJS.
 ***********************************

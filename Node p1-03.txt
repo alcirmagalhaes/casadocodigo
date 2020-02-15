@@ -1,0 +1,538 @@
+01-Projeto da aula anterior
+
+Começando deste ponto? Você pode fazer o download do projeto do capítulo anterior para continuar seus estudos!
+
+Você também precisará fazer o download do arquivo database.js!
+
+Problemas usando o comando npm install?? Siga as instrucoes aqui: https://cursos.alura.com.br/forum/topico-me-ajudem-80328
+***********************************
+02-Acessando o Banco de dados
+Vamos dar continuidade ao nosso projeto de modo que finalmente consigamos tornar a nossa listagem de livros dinâmica, ou seja, fazendo acesso a um banco de dados.
+
+Antes de tudo, no terminal, executaremos o comando npm install sqlite3@4.0.2 --save-exact para instalar o banco de dados que utilizaremos no curso. Com o SQLite habilitado, precisaremos colocar o arquivo database.js dentro da pasta "config" do nosso projeto.
+
+Esse arquivo importará o SQLite e criará uma instância do nosso banco de dados:
+
+const sqlite3 = require('sqlite3').verbose();
+const bd = new sqlite3.Database('data.db');
+Com essa sintaxe, o Node criará um arquivo data.db dentro da pasta do nosso projeto, representando o banco de dados que iremos utilizar.
+
+Ao final, ele disponibilizará a instância do banco de dados por meio do módulo que o nosso arquivo database.js representa, de modo que possamos manipular esse banco em outros arquivos.
+
+Nota: Por enquanto você não precisa se preocupar com a motivação do uso do SQLite, nem com detalhes do funcionamento do database.js.
+
+No arquivo rotas.js, vamos criar uma constante db recebendo require(), passando o caminho do módulo onde o banco de dados foi configurado:
+
+const db = require('../../config/database')
+Dessa forma, teremos uma instância desse banco de dados. Em seguida, na rota /livros, escreveremos db.all(), que é um método do SQLite executado quando queremos fazer algum tipo de listagem. Esse método receberá dois parâmetros: o primeiro, uma string representando a consulta que queremos fazer; e o segundo, uma função callback que será executada quando a nossa consulta tiver terminado.
+
+Essa função receberá dois parâmetros: erro, se ocorrer algum erro nessa consulta; e resultados. Como queremos selecionar todos os dados da tabela livros, a string que passaremos será SELECT * FROM livros:
+
+app.get('/livros', function(req, resp) {
+    db.all('SELECT * FROM livros', function(erro, resultados) {
+
+    });
+Se a nossa consulta der certo, os livros retornados serão armazenados no parâmetro resultados. Então, continuaremos chamando o template de listagem e passando os livros para a nossa página. Porém, dessa vez, os itens dessa lista não serão estáticos, mas sim os resultados vindos do banco de dados.
+
+Desse modo, passaremos o código do método marko() para dentro da função callback, substituindo os itens estáticos da lista pelos resultados:
+
+app.get('/livros', function(req, resp) {
+    db.all('SELECT * FROM livros', function(erro, resultados) {
+
+        resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+                livros: resultados
+            }
+
+        );
+
+    });
+
+
+});
+Feito isso, podemos salvar a aplicação e executá-la novamente no terminal. Acessando http://localhost:3000/livros, encontraremos a mesma lista que criamos anteriormente, mas dessa vez sendo acessada diretamente do banco de dados:
+
+Listagem de livros
+
+ID Título
+
+1 Node na prática
+
+2 JavaScript na prática
+
+Precisamos nos atentar ao fato de que o arquivo rotas.js está acumulando muitas possibilidades: estamos chamando a instância do banco de dados, selecionando os dados desse banco, acessando o template e finalmente passando oa lista para a página no navegador.
+
+Já sabemos que isso não é uma boa prática, mas como melhorar nosso código, distribuindo essas responsabilidades? A solução virá a seguir!
+***********************************
+03-exercício - Implementando a listagem
+Pedro fez a seguinte implementação da funcionalidade de listagem de livros:
+
+// rotas.js
+
+const db = require('../../config/database');
+
+module.exports = (app) => {
+
+   app.get('/livros', function(req, resp) {
+       db.all('SELECT * FROM livros', function(erro, resultados) {
+           resp.marko(
+               require('../views/livros/lista/lista.marko')
+           );
+       });
+   });
+};
+Sobre o código, podemos afirmar corretamente:
+
+Alternativa correta
+O código está correto e funcionará como esperado.
+
+
+Incorreto! O código não está correto! Ficou faltando passar ao template os dados dos livros obtidos na consulta ao banco de dados.
+
+Alternativa correta
+O código não está correto pois faltou passar ao template os dados obtidos do banco de dados da seguinte forma:
+
+// rotas.js
+
+const db = require('../../config/database');
+
+module.exports = (app) => {
+
+   app.get('/livros', function(req, resp) {
+       db.all('SELECT * FROM livros', function(erro, resultados) {
+           resp.marko(
+               require('../views/livros/lista/lista.marko'),
+
+               // faltou adicionar as 3 linhas a seguir.
+               {
+                   livros: resultados
+               }
+           );
+       });
+   });
+};
+
+Muito bem, aluno! Está correto! Realmente nosso colega acabou esquecendo de passar ao template os livros que pegou no banco de dados.
+
+Alternativa correta
+O código não funcionará pois não existe um método resp.marko() para criação de templates.
+
+
+Incorreto! Como visto em aula, é exatamente o método resp.marko() que nos permite criar templates com o MarkoJS!
+***********************************
+04-O padrão DAO
+Nessa nova etapa, aprenderemos um pouco sobre o padrão DAO, que é capaz de melhorar o nosso código. Mas como?
+
+Antes de tudo, vamos analisar o código da rota /livros:
+
+app.get('/livros', function(req, resp) {
+    db.all('SELECT * FROM livros', function(erro, resultados) {
+
+        resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+                livros: resultados
+            }
+
+        );
+
+    });
+
+
+});
+Nele, com a instância do banco de dados (db), estamos executando o método all(), utilizado pelo SQLite para fazer uma consulta no banco de dados. Para isso, passamos a string dessa consulta e uma função callback instruindo o que o JavaScript precisa fazer quando essa funcionalidade assíncrona de acesso ao banco tiver terminado.
+
+Porém, nosso código não tem semântica. Uma pessoa que não entende de SQL, por exemplo, não saberia imediatamente que estamos listando os livros.
+
+Gostaríamos de ter uma função listaLivros() que fosse responsável por essa ação. Nela, só precisaríamos passar o callback da nossa função all(), instruindo o que deve ser feito quando terminada a execução desse método de listagem.
+
+app.get('/livros', function(req, resp) {
+
+    listaLivros(function(erro, resultados) {
+
+        resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+                livros: resultados
+            }
+
+        );
+
+    });
+});
+Mas de onde viria essa função listaLivros(), que não aparece em nenhum momento no nosso código? Acompanhe.
+
+Dentro da pasta "app", criaremos uma nova pasta, chamada "infra". Dentro dela, criaremos o arquivo livro-dao.js, no qual definiremos uma classe do ECMAScript 6, chamada LivroDao:
+
+class LivroDao {
+}
+Essa classe nos fornecerá toda e qualquer funcionalidade relativa aos livros no banco de dados, como listagem, adição, remoção, edição, e assim por diante. Desse modo, faz sentido que toda instância de LivroDao tenha uma referência para o nosso banco de dados.
+
+Portanto, definiremos um construtor recebendo a instância db. Em seguida, definiremos que o atributo _db da nossa própria classe deverá receber o parâmetro db passado para o nosso construtor.
+
+class LivroDao {
+
+    constructor(db) {
+        this._db = db;
+    }
+}
+De posse da referência para o banco de dados, podemos criar o método listaLivros(), recebendo um parâmetro que chamaremos de callback. No corpo do método, pegaremos o atributo _db e chamaremos o método all(), passando o SQL que queremos executar - ou seja, o SELECT, que já havíamos construído no arquivo rotas.js, e a nossa função callback, que recebe erro e resultados.
+
+No corpo dessa função, chamaremos o callback(), passando os valores erro e resultados gerados pela nossa consulta.
+
+class LivroDao {
+
+    constructor(db) {
+        this._db = db;
+    }
+
+    listaLivros(callback) {
+        this._db.all(
+            'SELECT * FROM livros',
+            function(erro, resultados) {
+                callback(erro, resultados);
+            }        
+        )
+
+    }
+
+}
+Quem é mais versado em ECMAScript 6 sabe que, nesse ponto, poderíamos até mesmo utilizar as arrow functions para obtermos uma sintaxe ainda mais enxuta:
+
+class LivroDao {
+
+    constructor(db) {
+        this._db = db;
+    }
+
+    listaLivros(callback) {
+        this._db.all(
+            'SELECT * FROM livros',
+            (erro, resultados) =>
+                callback(erro, resultados)
+
+        )
+
+    }
+
+}
+Vamos recapitular o que construímos nesse código? Nós iremos delegar à classe LivroDao o acesso ao banco de dados. Ela terá um método listaLivros() que, quando executado, fará a seleção dos livros no banco. Ao término da seleção, a classe delegará ao callback, passado por listaLivros, o tratamento dos resultados ou do erro.
+
+Ainda precisamos exportar essa classe LivroDao para que possamos utilizá-la em outros módulos da aplicação. O module.exports é capaz de exportar um tipo definido por uma classe, e é exatamente isso que faremos:
+
+module.exports = LivroDao;
+De volta ao rotas.js, iremos importar a classe que acabamos de criar:
+
+const LivroDao = require('../infra/livro-dao');
+Nota: repare que estamos usando LivroDao, com letra maiúscula, pois é uma referência exata à classe que criamos.
+
+Na rota /livros,
+
+app.get('/livros', function(req, resp) {
+
+    const livroDao = new LivroDao(db);
+
+    livroDao.listaLivros(function(erro, resultados) {
+
+        resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+                livros: resultados
+            }
+
+        );
+
+    });
+
+});
+Com nossa aplicação rodando, poderemos acessar novamente a URL http://localhost:3000/livros. Se tudo estiver funcionando corretamente, a listagem de livros continuará sendo exibida corretamente:
+
+Listagem de livros
+
+ID Título
+
+1 Node na prática
+
+2 JavaScript na prática
+
+Porém, ainda há um detalhe incômodo... se já estamos na classe LivroDao, faz sentido chamarmos um método listaLivros()? A resposta é, obviamente, não. Portanto, vamos refatorar nosso método para somente lista(). Faremos isso em livro-dao.js:
+
+class LivroDao {
+
+    constructor(db) {
+        this._db = db;
+    }
+
+    lista(callback) {
+        this._db.all(
+            'SELECT * FROM livros',
+            (erro, resultados) =>
+                callback(erro, resultados)
+
+        )
+
+    }
+
+}
+
+module.exports = LivroDao;
+E também em rotas.js:
+
+app.get('/livros', function(req, resp) {
+
+    const livroDao = new LivroDao(db);
+
+    livroDao.lista(function(erro, resultados) {
+
+        resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+                livros: resultados
+            }
+
+        );
+
+    });
+
+});
+Ainda falta respondermos uma pergunta básica... por que chamamos o arquivo e a classe de livro-dao.js e LivroDao, respectivamente?
+
+A classe LivroDao será responsável por fazer o acesso ao banco de dados em referência aos livros no sistema. Isso é uma implementação de um padrão de projeto muito famoso, chamado DAO - Data Access Object (objeto de acesso aos dados).
+
+No mundo da programação, é muito comum nomearmos esses elementos com a palavra DAO precedida pelo tipo de dado que estamos acessando, deixando bem claro que esses códigos são referentes à aplicação do padrão DAO.
+
+Estamos passando, para o método lista(), um parâmetro callback que será executado ao final da seleção do banco de dados. Porém, queremos que o método lista() não precise receber parâmetro nenhum. Para isso, usaremos um recurso muito importante da linguagem JavaScript... que conheceremos a seguir!
+***********************************
+05-DAO com Promises
+Agora continuaremos melhorando o DAO que criamos anteriormente. Primeiro, vamos analisar o código da rota /livros em rotas.js:
+
+app.get('/livros', function(req, resp) {
+
+    const livroDao = new LivroDao(db);
+
+    livroDao.lista(function(erro, resultados) {
+
+        resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+                livros: resultados
+            }
+
+        );
+
+    });
+
+});
+Quando fazemos a listagem, chamamos o método lista() do nosso livroDao, passando uma função de callback que é executada ao final da operação assíncrona do acesso ao banco de dados. Por padrão, no mundo JavaScript, utilizam-se Promises para esse tipo de situação, e é isso que faremos agora.
+
+Começaremos chamando o método livroDao.lista() e, em seguida, o método then() das Promises (já conhecido por quem fez os cursos de JavaScript aqui na plataforma).
+
+Esse método deve receber a lista de livros e, a partir disso, enviá-la para a página de listagem com o método resp.marko() que construímos anteriormente. Porém, ao invés de resultados, passaremos livros, que é o parâmetro que estamos recebendo do método then().
+
+Além disso, também podemos concatenar a chamada do método catch(), que é executado quando acontece algum erro no processamento de uma Promise. Passaremos então o erro e pediremos que ele seja impresso com console.log(erro).
+
+Assim, teremos:
+
+app.get('/livros', function(req, resp) {
+
+    const livroDao = new LivroDao(db);
+    livroDao.lista()
+            .then(livros => resp.marko(
+                require('../views/livros/lista/lista.marko'),
+                {
+                    livros: livros
+                }
+
+            ))
+            .catch(erro => console.log(erro));
+
+});
+Agora, em livro-dao.js, precisaremos alterar o método de listagem, que não mais receberá uma função callback. No corpo dele, criaremos uma nova Promise com return new Promise().
+
+Com a sintaxe das arrow functions, faremos com que essa Promise receba uma função de dois parâmetros: resolve e reject, ou seja, as funções que serão executadas no momento que resolvermos ou rejeitarmos nossa Promise.
+
+Além disso, o corpo da Promise também será composto pela operação assíncrona que queremos fazer: o acesso ao banco de dados para fazer a listagem, mas sem a função callback().
+
+No lugar dela, retornaremos um erro com if (erro) return reject('Não foi possível listar os livros!'). O return é para que o código pare de ser executado caso a operação seja rejeitada.
+
+Caso isso não tenha acontecido, finalizaremos a Promise com sucesso, passando os resultados (que armazena a listagem de livros) como parâmetro de resolve(). Como nossa arrow function tem mais de um comando, precisamos definir o corpo dela com chaves ({}). Assim, teremos:
+
+class LivroDao {
+
+    constructor(db) {
+        this._db = db;
+    }
+
+    lista() {
+        return new Promise((resolve, reject) => {
+            this._db.all(
+                'SELECT * FROM livros',
+                (erro, resultados) => {
+                    if (erro) return reject('Não foi possível listar os livros!');
+
+                    return resolve(resultados);
+                }
+            )
+
+        });
+    }
+}
+
+module.exports = LivroDao;
+Feito isso, podemos rodar novamente nossa aplicação. Na URL http://localhost:3000/livros, continuaremos recebendo a nossa lista:
+
+Listagem de livros
+
+ID Título
+
+1 Node na prática
+
+2 JavaScript na prática
+
+Finalizado esse processo, já estamos aptos a desenvolver a página de cadastro de livros, de modo a aumentar a nossa listagem. É isso que aprendemos a seguir!
+***********************************
+06-exercício - Implementando o DAO
+Seguindo em frente, agora para implementar o padrão DAO com Promises, nosso colega Pedro fez o seguinte:
+
+// rotas.js
+
+const LivroDao = require('../infra/livro-dao');
+const db = require('../../config/database');
+
+module.exports = (app) => {
+   app.get('/livros', function (req, resp) {
+      livroDao.lista()
+         .then(livros => resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+               livros
+            }
+         ))
+         .catch(erro => console.log(erro));
+   });
+};
+// livro-dao.js
+
+class LivroDao {
+
+   constructor(db) {
+       this._db = db;
+   }
+
+   lista() {
+       return new Promise((resolve, reject) => {
+           this._db.all(
+               'SELECT * FROM livros',
+               (erro, resultados) => {
+                   if (erro) return reject('Não foi possível listar os livros!');
+
+                   return resolve(resultados);
+               }
+           )
+       });
+   }
+}
+
+module.exports = LivroDao;
+Sobre o código, podemos afirmar corretamente:
+
+Alternativa correta
+O código não funcionará, pois o correto seria passar um callback para o método lista() de LivroDao.
+
+
+Incorreto! Como visto em aula, essa afirmação estaria correta quando estávamos utilizando a abordagem com callbacks! Porém, a implementação agora passou a utilizar Promises.
+
+Alternativa correta
+O código não irá funcionar, pois faltou passar corretamente os dados para o template Marko da seguinte forma:
+
+livroDao.lista()
+       .then(livros => resp.marko(
+           require('../views/livros/lista/lista.marko'),
+           {
+               livros: livros
+           }
+       ))
+       .catch(erro => console.log(erro));
+
+Incorreto! Desde o ES6, quando montamos um objeto JavaScript cuja chave e valor sejam representadas pela mesma palavra (nesse caso, a palavra livros), podemos suprimir a escrita pela segunda vez da palavra e fazer como nosso colega fez.
+
+Alternativa correta
+O código não está correto, pois faltou criar uma instância da classe LivroDao definida no módulo livro-dao passando a ela um objeto representando o banco de dados utilizado. Portanto, o correto seria fazer:
+
+// rotas.js
+
+const LivroDao = require('../infra/livro-dao');
+const db = require('../../config/database');
+
+module.exports = (app) => {
+   app.get('/livros', function (req, resp) {
+      const livroDao = new LivroDao(db); // Criar a instância da classe LivroDao.
+      livroDao.lista()
+         .then(livros => resp.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+               livros
+            }
+         ))
+         .catch(erro => console.log(erro));
+   });
+};
+
+Muito bem, aluno! Está correto! Realmente nosso colega acabou esquecendo desses detalhes o que acarretaria num erro ao executar a aplicação.
+
+Alternativa correta
+O código está correto e funcionará como esperado.
+
+
+Incorreto! O código não está correto! Ficou faltando criar uma instância da classe LivroDao definida no módulo livro-dao passando a ela um objeto representando o banco de dados utilizado.
+***********************************
+07-exercício-Vantagens do DAO
+Você entendeu as vantagens do padrão de projeto DAO? Vamos verificar isso marcando as respostas corretas!
+
+Alternativa correta
+O padrão de projeto DAO permite dar maior semântica aos nossos códigos, como foi o caso do que ocorreu no módulo de rotas da nossa aplicação.
+
+
+Muito bem, aluno! Está correto! Essa é uma das utilidades do padrão DAO, e também da grande maioria dos padrões de projetos existentes.
+
+Alternativa correta
+Quando implementamos o padrão DAO, como convenção, sempre criamos uma estrutura com um nome que se inicia pelo tipo de dados acessado (no nosso caso livro) e termina com a palavra DAO. Por isso, no nosso caso, criamos uma classe com o nome LivroDao. Isso é feito para facilitar o entendimento de que aquela classe se refere ao acesso de dados do tipo livro.
+
+
+Muito bem, aluno! Está correto! O objetivo das convenções é justamente facilitar a vida dos desenvolvedores e estabelecer um padrão comum a todos.
+
+Alternativa correta
+O padrão DAO permite que façamos acesso aos dados sem nos preocuparmos em como esse acesso é feito ou onde os dados estão armazenados.
+
+
+Muito bem, aluno! Está correto! Como visto em aula, o padrão DAO é para acesso a dados! Portanto, independentemente se dados estão armazenados num banco de dados, num arquivo xml ou numa planilha, esse padrão é muito bem vindo!
+
+Alternativa correta
+Com o padrão DAO não é necessário escrever nenhum código referente a acesso aos dados pois o próprio Node se encarregará disso.
+
+
+Incorreto! O código de acesso aos dados precisou ser escrito e ficou encapsulado dentro da classe LivroDao.
+***********************************
+08-Consolidando conhecimentos
+
+Chegou a hora de você seguir todos os passos realizados por mim durante esta aula. Caso já tenha feito, excelente. Se ainda não, é importante que você implemente o que foi visto no vídeo para poder continuar com o próximo capítulo que tem como pré-requisito todo código aqui escrito.
+
+Se por acaso você já domina esta parte, em cada capítulo você terá a opção de baixar o projeto feito até aquele ponto. Você encontrará o link para download na próxima explicação do capítulo.
+
+VER OPINIÃO DO INSTRUTOR
+---
+Opinião do instrutor
+
+Tenha certeza de que tudo está certo antes de continuar. Ficou com dúvida? Recorra ao nosso fórum, não perca tempo!
+***********************************
+09-O que aprendemos?
+
+Nesse capítulo, aprendemos:
+
+O que é o SQLite.
+Como utilizar o SQLite numa aplicação Node.
+O que é o padrão DAO.
+O que são Promises.
+Como desenvolver o padrão DAO utilizando uma abordagem voltada para callbacks e voltada para Promises.
+***********************************
