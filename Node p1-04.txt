@@ -495,7 +495,142 @@ app.use(bodyParser.urlencoded({
    extended: true
 }));
 ***********************************
-08-
+08-(Obrigatório) Completando o DAO
+Desenvolvendo demais métodos do DAO
+Muito bem, meu aluno! Agora que já fizemos os métodos de listagem e inserção no nosso livro-dao.js, chegou o momento de um desafio! Você seria capaz de desenvolver os métodos buscaPorId(id), atualiza(livro) e remove(id)?
+
+O método buscaPorId(id) deve receber o ID do livro a ser buscado e retornar uma Promise com o livro buscado em caso de sucesso ou com uma mensagem de erro caso algo saia errado na busca.
+
+O método atualiza(livro) deve receber o livro e atualizá-lo no BD e retornar uma Promise vazia em caso de sucesso ou com uma mensagem de erro caso algo saia errado na atualização.
+
+Por fim, o método remove(id) deve receber o ID do livro a ser excluído e retornar uma Promise vazia em caso de sucesso ou com uma mensagem de erro caso algo saia errado na remoção.
+
+Dito isso: MÃOS À OBRA, meus alunos!!
+
+DICA: Não há muito mistério nesse desafio, afinal de contas, praticamente todas as ferramentas para resolvê-lo já foram dadas até aqui! No entanto, se houver dúvida sobre qual método do SQLite utilizar, a documentação sobre seus métodos de operações sobre o banco de dados será de grande utilidade!
+
+VER OPINIÃO DO INSTRUTOR
+Opinião do instrutor
+
+Para resolver esse desafio basta observar que tanto o método atualiza(id) e remove(id) não devem retornar nenhuma informação. Portanto, poderíamos utilizar o método run() do SQLite já visto durante as aulas e utilizado para a inserção de um novo livro na base de dados.
+
+O desafio mesmo ficaria por conta do método buscaPorId(id) que deve receber o ID do livro, efetuar uma busca no banco de dados e devolver o livro caso encontrado. Para isso, o método a ser utilizado seria o get() do SQLite que serve justamente para isso! Para saber mais sobre esse método, segue o link da documentação.
+
+Desse modo, o código completo do livro-dao.js ficará como a seguir:
+
+class LivroDao {
+
+    constructor(db) {
+        this._db = db;
+    }
+
+    adiciona(livro) {
+        return new Promise((resolve, reject) => {
+            this._db.run(`
+                INSERT INTO livros (
+                    titulo, 
+                    preco,
+                    descricao
+                ) values (?,?,?)
+                `,
+                [
+                    livro.titulo,
+                    livro.preco,
+                    livro.descricao
+                ],
+                function (err) {
+                    if (err) {
+                        console.log(err);
+                        return reject('Não foi possível adicionar o livro!');
+                    }
+
+                    resolve();
+                }
+            )
+        });
+    }
+
+    lista() {
+        return new Promise((resolve, reject) => {
+            this._db.all(
+                'SELECT * FROM livros',
+                (erro, resultados) => {
+                    if (erro) return reject('Não foi possível listar os livros!');
+
+                    return resolve(resultados);
+                }
+            )
+        });
+    }
+
+    buscaPorId(id) {
+
+        return new Promise((resolve, reject) => {
+            this._db.get(
+                `
+                    SELECT *
+                    FROM livros
+                    WHERE id = ?
+                `,
+                [id],
+                (erro, livro) => {
+                    if (erro) {
+                        return reject('Não foi possível encontrar o livro!');
+                    }
+                    return resolve(livro);
+                }
+            );
+        });
+    }
+
+    atualiza(livro) {
+        return new Promise((resolve, reject) => {
+            this._db.run(`
+                UPDATE livros SET
+                titulo = ?,
+                preco = ?,
+                descricao = ?
+                WHERE id = ?
+            `,
+            [
+                livro.titulo,
+                livro.preco,
+                livro.descricao,
+                livro.id
+            ],
+            erro => {
+                if (erro) {
+                    return reject('Não foi possível atualizar o livro!');
+                }
+
+                resolve();
+            });
+        });
+    }
+
+    remove(id) {
+
+        return new Promise((resolve, reject) => {
+            this._db.run(
+                `
+                    DELETE 
+                    FROM livros
+                    WHERE id = ?
+                `,
+                [id],
+                (erro) => {
+                    if (erro) {
+                        return reject('Não foi possível remover o livro!');
+                    }
+                    return resolve();
+                }
+            );
+        });
+    }
+}
+
+module.exports = LivroDao;
+Agora que todos estamos na luz, é só seguir em frente na nossa jornada!
 ***********************************
 09-
 ***********************************
