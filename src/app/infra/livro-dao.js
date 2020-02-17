@@ -100,7 +100,7 @@ class LivroDao {
                 [id],
                 (erro)=>{
                     if (erro) return reject('Não foi possível remover o livro!')
-                    resolve();
+                    return resolve();
                 }
             )
         });
