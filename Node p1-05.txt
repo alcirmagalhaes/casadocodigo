@@ -100,7 +100,23 @@ Refused to execute script from 'http://localhost:3000/remove-livro.js' because i
 
 Entenderemos esses erros a seguir!
 ***********************************
-03-
+03-Para saber mais: Dataset API
+Uma das preocupações levadas em consideração durante a criação da especificação HTML5 foi a extensibilidade dos dados que precisam ser associados a um determinado elemento. A boa notícia é que é a Dataset API foi criada justamente pensando nessa questão! Além disso, seu uso é muito simples, bastando, para isso, utilizar os atributos data-*! Vamos analisar um exemplo:
+
+<div id="usuario" data-id="12345" data-usuario="gabriel.leite">
+     Gabriel Leite
+</div>
+const elemento = document.querySelector('#usuario');
+
+console.log(elemento.dataset.id);  // '12345'
+console.log(elemento.dataset.usuario);  // 'gabriel.leite'
+Repare que, no primeiro trecho de código, temos um elemento HTML com três atributos: o famoso e já conhecido id, e, em seguida, dois atributos no formato data-* - data-id e data-usuario. Note que esses dois últimos estão presentes apenas com o objetivo de agregar informação ao nosso elemento HTML.
+
+Já no segundo trecho de código, utilizando JavaScript, podemos recuperar o elemento do HTML utilizando o método document.querySelector() e um seletor de ID. Por fim, recuperamos os valores dos atributos data-* acessando a propriedade dataset de nosso elemento recuperado, seguido do nome do atributo que criamos. Portanto, nesse mesmo exemplo, se criarmos um data-batman, podemos recuperá-lo fazendo elemento.dataset.batman! Isso facilita muito a nossa vida no dia-a-dia! Foi exatamente esse recurso que utilizamos na aula anterior, no link de remoção do livro, para passar algumas informações para o código JavaScript.
+
+Por fim, caso queira se aprofundar ainda mais nesse assunto e seguir caminhando em direção à luz do conhecimento, indico esse link e também esse outro da documentação da Dataset API!
+
+Dito isso, de posse de mais esse conhecimento extra na nossa amada linguagem JavaScript, podemos seguir em frente com o nosso curso de Node! Vamos lá!
 ***********************************
 04-
 ***********************************
