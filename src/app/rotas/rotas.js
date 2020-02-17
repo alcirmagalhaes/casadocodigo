@@ -39,7 +39,8 @@ module.exports = (app) => {
 
     app.post('/livros', function(req, resp){
 
-        console.log(req.body);
+        console.log(req.body); 
+
         const livroDao = new LivroDao(db);
         livroDao.adiciona(req.body)
                 .then(resp.redirect('/livros'))
@@ -49,8 +50,9 @@ module.exports = (app) => {
     app.delete('/livros/:id', function(req, resp){
         const id = req.params.id;
         const livroDao = new LivroDao(db);
+        console.log('remover livro:' + id);
         livroDao.remove(id)
-                .then(()=>resp.status(200).end())
+                .then(()=>resp.status(202).end())
                 .catch(erro=> console.log(erro));
     });
 };
