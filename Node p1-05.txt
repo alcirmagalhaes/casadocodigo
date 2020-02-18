@@ -626,7 +626,22 @@ O código está correto e irá alterar o livro como esperado.
 
 Incorreto! Nossa colega definiu incorretamente o middleware do method-override antes do middleware do body-parser.
 ***********************************
-10-
+10-Conclusão
+Parabéns, você concluiu o curso Node.js Parte 1: Inovando com JavaScript no backend!
+
+Ao longo do curso, aprendemos como o Node nos auxilia a utilizar a linguagem JavaScript do lado do servidor, possibilitando a criação de uma aplicação web comum (o que também poderia ser feito com outras linguagens, como Java, PHP, entre outras).
+
+Desse modo, passamos pelos principais pontos relativos à plataforma Node: o que é, quais são os módulos que ela utiliza, como implementar módulos externos, como criar templates dinâmicos e como lidar com requisições e respostas HTTP.
+
+Acha que acabou? Achou errado! Na segunda parte do curso, continuaremos melhorando nossa aplicação: aperfeiçoaremos sua arquitetura, implementaremos segurança e validaremos as informações passadas pelo usuário nos formulários. Com isso, aprenderemos recursos ainda mais avançados da plataforma Node!
+
+Chega de spoilers!
+
+Se ficou com dúvidas até aqui, converse com instrutores e outros alunos lá no nosso fórum. E não se esqueça de avaliar o curso para que saibamos como está sendo a sua experiência aqui na Alura.
+
+Bons estudos e até a próxima!
+
+
 ***********************************
 11-
 ***********************************
