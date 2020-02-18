@@ -145,7 +145,79 @@ No arquivo lista.marko, alteraremos a tag <script> para que reflita a localizaç
 </script> 
 Salvando essas alterações, reiniciaremos a aplicação e acessaremos a URL http://localhost:3000/livros. Nela, finalmente poderemos remover os livros da lista com sucesso! A seguir, implementaremos a próxima funcionalidade da nossa aplicação, que é a edição dos nossos livros.
 ***********************************
-05-
+05-exercício- Implementando a remoção
+Joana fez o seguinte código para implementar a funcionalidade de remoção de livros:
+
+<!-- lista.marko -->
+
+<html>
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body>
+       <h1> Listagem de livros </h1>
+
+       <table id="livros">
+           <tr>
+               <td>ID</td>
+               <td>Título</td>
+               <td>Preço</td>
+               <td>Editar</td>
+               <td>Remover</td>
+           </tr>
+           <tr id="livro_${livro.id}" for (livro in data.livros)>
+               <td>${livro.id}</td>
+               <td>${livro.titulo}</td>
+               <td>${livro.preco}</td>
+               <td><a href="#">Editar</a></td>
+               <td><a href="#" data-ref="${livro.id}" data-type="remocao">Remover</a></td>
+           </tr>
+       </table>
+
+       <script src="/estatico/js/remove-livro.js">
+       </script>
+   </body>
+</html>
+// rotas.js
+
+module.exports = (app) => {
+
+   // demais rotas.
+
+   app.delete('/livros/:id', function(req, resp) {
+       const id = req.params.id;
+
+       const livroDao = new LivroDao(db);
+       livroDao.remove(id)
+               .then(() => resp.status(200).end())
+               .catch(erro => console.log(erro));
+   });
+};
+Sobre o código de nossa colega, e considerando que, assim como na aula, o arquivo remove-livro.js está na pasta src/app/public/js e implementado da forma correta, marque as alternativas que indicam afirmativas corretas.
+
+Alternativa correta
+Não irá funcionar como esperado, pois a forma correta de obter o ID do livro passado na URL seria req.id.
+
+
+Incorreto! A forma de obtenção do ID do livro está correta! O que nossa colega esqueceu de fazer foi de configurar o middleware do Express para possibilitar o acesso a arquivos estáticos do projeto.
+
+Alternativa correta
+O código não está completo, pois faltou configurar o middleware do Express para acesso a arquivos estáticos do projeto.
+
+
+Muito bem, aluno! Está correto! Foi exatamente isso que nossa colega deixou escapar! O código que ficou faltando foi:
+
+// custom-express.js
+
+const express = require('express');
+const app = express();
+
+app.use('/estatico', express.static('src/app/public'));
+Alternativa correta
+Não irá funcionar como esperado, pois a forma correta de devolver o status da resposta seria fazendo resp.end(200).
+
+
+Incorreto! Nossa colega acertou nessa parte! O que ela esqueceu de fazer foi de configurar o middleware do Express para possibilitar o acesso a arquivos estáticos do projeto.
 ***********************************
 06-
 ***********************************
