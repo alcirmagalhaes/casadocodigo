@@ -286,7 +286,109 @@ Isso acontece pois, no nosso formulário, estamos submetendo as informações co
 
 Resolveremos esse problema a seguir!
 ***********************************
-07-
+07-exercício-Implementando a edição
+Seguindo em frente, Joana agora fez o seguinte código para implementar a última funcionalidade, a de edição de livros:
+
+<!-- lista.marko -->
+
+<html>
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body>
+       <h1> Listagem de livros </h1>
+
+       <table id="livros">
+           <tr>
+               <td>ID</td>
+               <td>Título</td>
+               <td>Preço</td>
+               <td>Editar</td>
+               <td>Remover</td>
+           </tr>
+           <tr id="livro_${livro.id}" for (livro in data.livros)>
+               <td>${livro.id}</td>
+               <td>${livro.titulo}</td>
+               <td>${livro.preco}</td>
+               <td><a href="/livros/form/${livro.id}">Editar</a></td>
+               <td><a href="#" data-ref="${livro.id}" data-type="remocao">Remover</a></td>
+           </tr>
+       </table>
+
+       <script src="/estatico/js/remove-livro.js">
+       </script>
+   </body>
+</html>
+<!-- form.marko -->
+
+<html>
+   <body>
+       <h1>Cadastro de livros</h1>
+
+       <form action="/livros" method="post">
+
+           <input type="hidden" name="id" value="${data.livro.id}">
+           <div>
+               <label for="titulo">Titulo:</label>
+               <input type="text" id="titulo" name="titulo" value="${data.livro.titulo}"/>
+           </div>
+           <div>
+               <label for="capa">Capa:</label>
+               <input type="file" id="capa" name="capa" placeholder="imagem de capa"/>
+           </div>
+           <div>
+               <label for="preco">Preço:</label>
+               <input type="text" id="preco" name="preco" placeholder="150.25" value="${data.livro.preco}"/>
+           </div>
+           <div>
+               <label for="descricao">Descrição:</label>
+               <textarea cols="20" rows="10"  id="descricao" name="descricao" placeholder="fale sobre o livro">${data.livro.descricao}</textarea>
+           </div>
+
+           <input type="submit" value="Salvar"/>
+       </form>
+   </body>
+</html>
+// rotas.js
+
+module.exports = (app) => {
+
+   // demais rotas.
+
+   app.get('/livros/form/:id', function(req, resp) {
+       const { id } = req.params;
+       const livroDao = new LivroDao(db);
+
+       livroDao.buscaPorId(id)
+               .then(livro => resp.marko(require('../views/livros/form/form.marko'), { livro }))
+               .catch(erro => console.log(erro));
+   });
+};
+No entanto, ela está em dúvida sobre o resultado disso! Portanto, marque as alternativas que apresentam afirmações verdadeiras!
+
+Alternativa correta
+O código da forma que está irá inserir um novo livro em vez de editar o livro selecionado.
+
+
+Muito bem, aluno! Está correto! Foi exatamente esse o comportamento visto durante a aula e também será esse o comportamento do código de nossa colega! Esse enigma só será resolvido mais pra frente! Então siga em frente e vá correndo pra próxima aula!
+
+Alternativa correta
+O código não irá funcionar, pois o método correto a ser na propriedade method do formulário do template form.marko seria o PUT, fazendo <form action="/livros" method="put">.
+
+
+Incorreto! A tag form do HTML só aceita os valores get e post para sua propriedade method.
+
+Alternativa correta
+O código está correto e irá alterar o livro como esperado.
+
+
+Incorreto! O comportamento do código de nossa colega será exatamente o mesmo visto em aula, ou seja, irá inserir um novo livro em vez de editá-lo!
+
+Alternativa correta
+O código não irá funcionar, pois Joana pegou de forma incorreta o ID do livro vindo na URL. A forma correta seria: const id = req.params.id.
+
+
+Incorreto! Nossa colega acertou nessa parte! O que ela utilizaou foi um recurso do ES6 chamado de destructuring assignment ou object destructuring! Para saber mais: https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/Atribuicao_via_desestruturacao
 ***********************************
 08-
 ***********************************
