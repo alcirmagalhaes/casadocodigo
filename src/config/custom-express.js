@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 
 //midlleware para arquivos estáticos.
 app.use('/estatico', express.static('src/app/public'));
-//app.use('/estatico', express.static('/src/app/public')); 
 
 //incluindo o midlleware body parser no app
 app.use(bodyParser.urlencoded({
